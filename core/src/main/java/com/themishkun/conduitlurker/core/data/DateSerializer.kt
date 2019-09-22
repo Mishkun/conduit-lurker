@@ -12,7 +12,7 @@ class DateSerializer : KSerializer<Date> {
     private val formatLink = ThreadLocal<SimpleDateFormat>()
     private val format
         get() = formatLink.getOrSet {
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US)
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
         }
 
     override val descriptor: SerialDescriptor = StringDescriptor.withName("Date from timestamp")
