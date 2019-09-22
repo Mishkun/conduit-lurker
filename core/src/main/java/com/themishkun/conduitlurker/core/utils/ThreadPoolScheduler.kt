@@ -5,7 +5,7 @@ import java.util.concurrent.Executors
 private typealias Scheduler = (() -> Unit) -> Unit
 private typealias Task = () -> Unit
 
-class ComputationThreadPoolScheduler : Scheduler {
+class ComputationScheduler : Scheduler {
     private val executor =
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
@@ -14,7 +14,7 @@ class ComputationThreadPoolScheduler : Scheduler {
     }
 }
 
-class IoThreadPoolScheduler : Scheduler {
+class IoScheduler : Scheduler {
     private val executor =
         Executors.newCachedThreadPool()
 

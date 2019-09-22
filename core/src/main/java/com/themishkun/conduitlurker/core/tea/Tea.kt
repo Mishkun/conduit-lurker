@@ -21,7 +21,9 @@ class TeaHandlerFeature<Msg : Any, State : Any, Effect : Any>(
     initialState: State,
     private val reducer: (Msg, State) -> Pair<State, Set<Effect>>
 ) : TeaFeature<Msg, State, Effect> {
-    private val reduceThread = HandlerThread("reducer thread")
+    private val reduceThread = HandlerThread("reducer thread").apply {
+        start()
+    }
     private val reduceHandler = Handler(reduceThread.looper)
     private val callerThreadHandler = Handler(Looper.myLooper())
     private val stateListeners = mutableListOf<(state: State) -> Unit>()
