@@ -20,14 +20,14 @@ sealed class Msg {
         data class OnFeedLoaded(val listResponse: LoadableData<List<Article>>) : FeedMsg()
         data class OnArticleClick(val articleSlug: Slug) : FeedMsg()
         data class OnArticleTagClick(val articleTag: Tag) : FeedMsg()
-        object OnBack : FeedMsg()
     }
 
     sealed class ReadMsg : Msg() {
         data class OnArticleLoaded(val articleResponse: LoadableData<Article>) : ReadMsg()
         data class OnArticleTagClick(val articleTag: Tag) : ReadMsg()
-        object OnBack : ReadMsg()
     }
+
+    object OnBack : Msg()
 }
 
 sealed class Effect {
@@ -40,6 +40,7 @@ sealed class Effect {
 fun reducer(msg: Msg, state: AppState): Pair<AppState, Set<Effect>> = when {
     msg is FeedMsg && state.screen is Feed -> feedReducer(msg, state, state.screen)
     msg is ReadMsg && state.screen is Read -> readReducer(msg, state, state.screen)
+    msg is Msg.OnBack -> closeScreen(state)
     else -> state to emptySet()
 }
 
@@ -51,14 +52,12 @@ internal fun feedReducer(msg: FeedMsg, state: AppState, screen: Feed): Pair<AppS
             backStack = state.backStack.plus(state.screen)
         ) to setOf(Effect.LoadArticle(msg.articleSlug))
         is FeedMsg.OnArticleTagClick -> openTagFeed(msg.articleTag, state)
-        FeedMsg.OnBack -> closeScreen(state)
     }
 
 internal fun readReducer(msg: ReadMsg, state: AppState, screen: Read): Pair<AppState, Set<Effect>> =
     when (msg) {
         is ReadMsg.OnArticleTagClick -> openTagFeed(msg.articleTag, state)
         is ReadMsg.OnArticleLoaded -> state.copy(screen = screen.copy(msg.articleResponse)) to emptySet()
-        ReadMsg.OnBack -> closeScreen(state)
     }
 
 private fun closeScreen(

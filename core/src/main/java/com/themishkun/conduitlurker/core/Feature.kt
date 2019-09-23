@@ -66,7 +66,7 @@ val feature by lazy {
                 }.execute(
                     deserializer = {
                         val response = json.parseJson(it)
-                        val article = response.jsonObject.getArray("article")
+                        val article = response.jsonObject.getObject("article")
                         val deserialized = json.fromJson(Article.serializer(), article)
                         LoadableData.Success(deserialized)
                     },
