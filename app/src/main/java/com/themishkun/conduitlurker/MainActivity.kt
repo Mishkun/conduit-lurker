@@ -36,7 +36,11 @@ class MainActivity : AppCompatActivity() {
                                 backgroundColor(Color.parseColor("#FEFEFE"))
                                 orientation(HORIZONTAL)
 
-                                textView { text("Feed by tag") }
+                                textView {
+                                    width(0)
+                                    weight(1f)
+                                    text("Feed by tag")
+                                }
                                 badge(tag)
                             }
                         }
