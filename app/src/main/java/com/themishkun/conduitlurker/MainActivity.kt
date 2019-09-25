@@ -19,13 +19,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(object : RenderableView(this) {
             override fun view() {
                 when (val screen = feature.currentState.screen) {
-                    is Screen.Feed -> feed(screen)
-                    is Screen.Read -> read(screen)
+                    is Screen.Feed -> {
+                        feed(screen)
+                        read(null)
+                    }
+                    is Screen.Read -> {
+                        feed(null)
+                        read(screen)
+                    }
                 }
             }
 
-            private fun feed(screen: Screen.Feed) {
+            private fun feed(s: Screen.Feed?) {
                 scrollView {
+                    visibility(s != null)
+                    val screen = s ?: return@scrollView
+
                     linearLayout {
                         orientation(VERTICAL)
                         backgroundColor(Color.parseColor("#FFFFFF"))
@@ -74,10 +83,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            private fun read(screen: Screen.Read) {
+            private fun read(s: Screen.Read?) {
                 linearLayout {
                     orientation(VERTICAL)
                     padding(dip(16))
+                    visibility(s != null)
+                    val screen = s ?: return@linearLayout
 
                     when (val article = screen.article) {
                         LoadableData.Loading -> {
